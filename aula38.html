@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://unpkg.com/vue"></script>
+	<title>If, else, elseif</title>
+</head>
+<body>
+	<div id="app">
+		<p v-if="nota === 'A'">Parabéns,você tirou um "A"!</p>
+		<p v-else-if="nota === 'B'">Você tirou um "B", mas pode melhorar!</p>
+		<p v-else-if="nota === 'C'">Você precisa melhorar, estude mais. Sua nota: "C"</p>
+		<p v-else>Nota ainda não publicada.</p>
+		<input v-model="nota" placeholder="Nota">
+
+		<br><hr><br>
+
+		<p>
+			<ul>
+				<li>Lista</li>
+				<li>Item 1</li>
+				<template v-if="mostrar">
+					<li>Item 2</li>
+					<li>Item 3</li>
+				</template>
+			</ul>
+		</p>
+
+		<br><hr><br>
+
+		<p>
+			<button @click="login = !login">Toggle</button>
+			<template v-if="login" key="campo-login">
+				<label>Login:
+					<input placeholder="Login"></label>
+			</template>
+			<template v-else key="campo-email">
+				<label>E-mail:
+					<input placeholder="E-mail"></label>
+			</template>
+		</p>
+
+		<br><hr><br>
+
+		<p>
+			<button @click="Mostrar = !Mostrar">Toggle</button>
+			<p v-show="Mostrar">Diretiva v-show "{{ Mostrar }}"</p>
+		</p>
+
+		<br><hr><br>
+
+		<p>
+			<button @click="Mostrar = !Mostrar">Toggle</button>
+			<p v-if="Mostrar">Diretiva v-if "{{Mostrar}}"</p>
+			<p v-show="Mostrar">Diretiva v-show "{{Mostrar}}"</p>
+			<input v-model="texto">
+		</p>
+
+		<br><hr><br>
+
+		<p>
+			<h1>Produtos</h1>
+			<ul>
+				<li v-for="valor in produtos">{{valor}}</li>
+			</ul>
+			<hr>
+			<ul>
+				<li v-for="(valor, chave) in produto">{{chave}} : {{valor}}</li>
+			</ul>
+			<hr>
+			<ul>
+				<li v-for="(valor, chave, indice) in produto">{{indice}}. {{chave}} : {{valor}}</li>
+			</ul>
+		</p>
+
+		<br><hr><br>
+
+		<p>
+			<h1>Números</h1>
+			<ul>
+				<li style="list-style-type: none;" v-for="valor in 20"> {{ valor }} </li>
+			</ul>
+		</p>
+
+		<br><hr><br>
+
+		<p>
+			<h1>Produtos:</h1>
+			<ul>
+				<li v-for="produto in products"> {{produto}}</li>
+			</ul>
+			<ul>
+				<li v-for="produto in products" :key="products.id"> {{produto}}</li>
+			</ul>
+			<button @click="products.reverse()">Inverter Listas</button>
+			<button @click="addProduto">Add Produto</button>
+		</p>
+
+		<br><hr><br>
+
+		<p>
+			<h1>Tarefas</h1>
+			<ul>
+				<li v-for="tarefa in tarefas" :key="tarefas.id"  v-if="!tarefa.completa"> {{ tarefa.titulo }} </li>
+			</ul>
+
+			<ul>
+				<h1>Tarefas Incompletas:</h1>
+				<li v-for="tarefa in tarefasIncompletas" :key="tarefas.id"> {{ tarefa.titulo }} </li>
+			</ul>
+		</p>
+
+		<br><hr><br>
+
+		<p>
+			<h1>Produtos:</h1>
+			<ul>
+				<li v-for="produto in products" :key="produto.id"> {{ produto.nome }} </li>
+			</ul>
+			<button @click="adicionarProduto">Adicionar Produto</button>
+
+			<button @click="products = products.slice(0, 4)">Substituir Array</button>
+
+		</p>
+		
+		<br><hr><br>
+
+		<p>
+			<p>Objetos:</p>
+			<ul>
+				<li v-for="(valor, chave) in produto">{{chave}} : {{valor}}</li>
+				<button @click="adicionarPropiedade">Adicionar Propriedade</button>
+			</ul>
+		</p>
+
+	</div>
+
+	<script>
+		new Vue({
+			el:'#app',
+			data: {
+				nota: '',
+				mostrar: true,
+				login: true,
+				Mostrar: true,
+				texto: 'Olá Vuejs',
+				produtos: [
+				'Monitor',
+				'Teclado',
+				'Mouse'
+				],
+
+				produto: {
+				id: 1,
+				nome: 'Teclado',
+				marca: 'Dell',
+				valor: 100
+				},
+
+				products: [
+				{ id: 1, nome: 'Monitor' },
+				{ id: 2, nome: 'Teclado' },
+				{ id: 3, nome: 'Mouse'},
+				{ id: 4, nome: 'Processador'},
+				],
+
+				tarefas: [
+				{ id: 1, titulo: 'Aprender JavaScript', completa: true },
+				{ id: 2, titulo: 'Aprender Vue', completa: false },
+				{ id: 3, titulo: 'Aprender Vuex', completa: false },
+				{ id: 4, titulo: 'Aprender VueRouter', completa: false },
+				]
+			},
+			methods: {
+				addProduto: function() {
+					var id = this.products.length + 1;
+					this.products.push({ id: id, nome: 'Produto' + id});
+				},
+				adicionarProduto: function(event) {
+					var id = this.products.length + 1;
+					this.products.push({ id: id, nome: 'Produto' + id})
+				},
+				adicionarPropiedade: function(event) {
+					this.$set(this.produto, 'preço', 100)
+				}
+			},
+			computed: {
+				tarefasIncompletas: function() {
+					return this.tarefas.filter(function(tarefa) {
+						return !tarefa.completa;
+					});
+				}
+			}
+		})
+	</script>
+</body>
+</html>

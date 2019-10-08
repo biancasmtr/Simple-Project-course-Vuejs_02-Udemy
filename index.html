@@ -1,0 +1,204 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Vue Js - Guia completo</title>
+	 <script src="https://unpkg.com/vue"></script>
+</head>
+<body>
+	<div id="app">
+		<button v-on:click="incrementar">Clique</button>
+		<p>Botão clicado {{ cliques }} vezes</p>
+
+		<br><hr><br>
+
+		<p v-on:mousemove="atualizarcoord">coordenadas x: {{x}} e y: {{y}}</p>
+
+		<br><hr><br>
+
+		<p>
+		<input v-on:blur="exibirNome('Meu nome é ', $event)">
+		<p>{{ nome }}</p>
+		</p>
+
+		<br><hr><br>
+
+		<p v-on:click="onClick('p', $event)">Curso de Vuejs
+		<button v-on:click.stop="onClick('button', $event)">Clique</button>
+		</p>
+		
+		<br><hr><br>
+
+		<form type="text">
+			<button type="submit" v-on:click="onSubmit">Enviar sem modificador</button>
+			<button type="submit" v-on:click.prevent="onSubmit">Enviar  com modificador</button>
+		</form>
+		
+		<br><hr><br>
+
+		<p>
+			<input v-on:keyup="onKey" placeholder="Qualquer Tecla">
+			<br><br>
+			<input v-on:keyup.enter="onKey" placeholder="Tecla Enter">
+			<br><br>
+			<input v-on:keyup.enter.esc="onKey" placeholder="Tecla Enter e Esc">
+		</p>
+		
+		<br><hr><br>
+
+		<p>
+			<p>Nome: {{nomeCompleto}}</p>
+			<input @keyup.enter="alterarNome">
+		</p>
+		
+		<br><hr><br>
+
+		<p>
+			<p>Nome: {{nome}}</p>
+			<input v-model="nome">
+		</p>
+
+		<br><hr><br>
+
+		<p>
+			<div class="caixa" :class="{ coral: aplicarClasse }" @click="aplicarClasse = !aplicarClasse"></div>
+		
+			<div class="caixa" :class="nomeDaClasse"></div>
+			
+			<div class="caixa" :class="classesCSS" @click="aplicarClasse = !aplicarClasse"></div>
+
+			<div class="caixa" :class="['circulo', nomeDaClasse, {verde: aplicarClasse}]"></div>
+
+			<input v-model="nomeDaClasse" placeholder="Nome da classe css">
+		</p>
+
+		<br><hr><br>
+	</div>
+
+
+<!-- ============== APP 2 ================= -->
+
+	<div id="app2">
+		<div style="width: 100px; height: 100px;"
+		:style="{ backgroundColor: cor, height: tamanho + 'px' }" 
+		></div>
+		<div :style="estilosCSS"></div>
+		<input v-model="cor" placeholder="Cor">
+		<input v-model.number="tamanho" placeholder="Tamanho">
+	</div>
+
+	<!-- ============== SCRIPT ================= -->
+
+	<script type="text/javascript">
+		new Vue({
+			el:'#app',
+			data: {
+				cliques:0,
+				x: 0,
+				y: 0,
+				nome:'',
+				primeiroNome: 'Bianca',
+				ultimoNome: 'Monteiro',
+				aplicarClasse: false,
+				nomeDaClasse: ''
+			},
+			methods: {
+				incrementar: function() {
+					this.cliques++;
+				},
+				atualizarcoord: function(event){
+					this.x = event.clientX;
+					this.y = event.clientY; 
+				},
+				exibirNome: function(texto, event) {
+					this.nome = texto +event.target.value;
+				},
+				onClick: function(elementoAlvo, event) {
+
+					console.log(event.type, ':', elementoAlvo)
+				},
+				onSubmit: function(){
+					console.log('Formulário Enviado');
+				},
+				onKey: function(event){
+					console.log('Tecla ' + event.key + ' pressionada');
+				},
+				alterarNome: function(event) {
+					this.nomeCompleto =  event.target.value;
+				}
+			},
+			computed: {
+				nomeCompleto: {
+					get: function(){
+						return this.primeiroNome + ' ' + this.ultimoNome
+					},
+					set: function(novoNome){
+						var nomes = novoNome.split(' ');
+						this.primeiroNome = nomes[0];
+						this.ultimoNome = nomes[nomes.length - 1];
+						}
+					},
+					classesCSS: function(){
+						return {
+							vermelho: this.aplicarClasse,
+							circulo: this.aplicarClasse,
+							verde: !this.aplicarClasse
+						}
+					}
+				}
+			})
+
+	</script>
+
+  <script>
+	new Vue({
+		el: '#app2',
+		data: {
+			cor: '',
+			tamanho: 200
+		}, 
+		computed: {
+			estilosCSS: function() {
+				return {
+					backgroundColor: this.cor,
+					height: (this.tamanho + 10 + 'px'),
+					width: '100px'
+				}
+			}
+		}
+	})  
+  </script>
+
+	<style>
+		.caixa {
+			width: 100px;
+			height: 100px;
+			display: inline-block;
+			margin-right: 10px;
+			background-color: gray;
+		}
+
+		.coral {
+			background-color: lightcoral;
+		}
+
+		.verde {
+			background-color: green;
+		}
+
+		.vermelho {
+			background-color: red;
+		}
+
+		.circulo {
+			border-radius: 100%;
+		}
+
+		#app2 div {
+			display: inline-block;
+			margin-right: 10px;
+			background-color: gray;
+		}
+
+	</style>
+</body>
+</html>

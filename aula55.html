@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<script src="https://unpkg.com/vue"></script>
+	<title>Vue JS - Guia Completo</title>
+</head>
+<body>
+	<div id="app">
+		<h3 v-if="mostrarMensagem">Título alterado!</h3>
+		<p>Título: {{ titulo }}</p>
+		<p>Título lower case: {{ tituloLower }} </p>
+		<input v-model="novoTitulo">
+		<button @click="alterarTitulo">Alterar Titulo</button>
+	</div>
+
+	<div id="app2">
+		<h2>Instância 2</h2>
+		<p>Título: {{ titulo }} </p>
+		<button @click="alterarTitulo">Alterar Título</button>
+
+		<br><hr><br>
+
+		<p>
+			<h2 ref="meuTitulo">{{ tit }}</h2>
+			<button @click="alterarTit">Alterar Titulo</button>
+		</p>
+	</div>
+
+	<script>
+		var vm1 = new Vue({
+			el:'#app',
+			data: {
+				titulo: 'Instância Vue',
+				novoTitulo: '',
+				mostrarMensagem: false
+			},
+
+			methods: {
+				alterarTitulo: function(){
+					this.titulo = this.novoTitulo;
+					this.novoTitulo = '';
+				}
+			},
+
+			computed: {
+				tituloLower: function() {
+					return this.titulo.toLowerCase().split(' ').join('-');
+				}
+			},
+
+			watch: {	
+				titulo: function(novoTitulo, antigoTitulo) {
+					console.log('Título alterado: ', 'de "', antigoTitulo, '" para "', novoTitulo, '"');
+					this.mostrarMensagem = true;
+					var self = this;
+					setTimeout(function(){
+						self.mostrarMensagem = false;
+					}, 3000);
+				}
+			}
+		});
+
+		var vm2 = new Vue({
+			el:'#app2',
+			data:{
+				titulo: 'Instancia Vue 2',
+				tit: 'Vuuuuue'
+			},
+			methods: {
+				alterarTitulo: function(){
+					vm1.titulo = 'Curso de Vuejs 1'
+				}
+			},
+			methods: {
+				alterarTit: function(event) {
+					this.$refs.meuTitulo.innerText = 'Curso de Vuejs'
+				}
+			}
+		})
+	</script>
+</body>
+</html>
